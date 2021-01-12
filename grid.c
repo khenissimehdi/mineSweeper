@@ -62,24 +62,24 @@ void add_mines(grid *g, int n) {
 
 	for ( i = 0; i < n; i++)
 	{
-
-		x = rand() % 15;
-		y = rand() % 15;
+		
+		x = rand() % (g->y_size-1);
+		y = rand() % (g->y_size-1);
 		if (g->cells[x][y].mine != 1)
 		{
 			g->cells[x][y].mine = 1;
 			for (dx = -1; dx <= 1; dx++){
-			for (dy = -1; dy <= 1; dy++){
-				if ((x+dx) >= 0 && (x+dx) <= 15 && (y+dy) >= 0 && (y+dy) <= 15 )
-				{
-					if (dx != 0 || dy != 0)
+				for (dy = -1; dy <= 1; dy++){
+					if ((x+dx) >= 0 && (x+dx) <= g->x_size && (y+dy) >= 0 && (y+dy) <= g->y_size )
 					{
-						g->cells[x+dx][y+dy].mine_count += 1;
-						
+						if (dx != 0 || dy != 0)
+						{
+							g->cells[x+dx][y+dy].mine_count += 1;
+							
+							
+						}
 						
 					}
-					
-				}
 		}	
 	}
 			
@@ -89,14 +89,9 @@ void add_mines(grid *g, int n) {
 			i--;
 		}
 		
-		
-		
-		
-	
 
 	}
-    
-	
+
 		 
 }
 
@@ -105,42 +100,32 @@ void add_mines(grid *g, int n) {
  * Return the total number of cells uncovered.
  */
 int uncover(grid *g, cell *c) {
-	int dx,dy,count;
-	if (c->visible == 1 || c->marked == 1)
-	{
-		return 0; 
-	}
-	else
-	{
-		c->visible = 1 ;
-		draw_cell_actualise_window(c);
-		
-		if (c->mine == 1 || c->mine_count > 0)
-		{
-			return 1;
-			
-		}
-		else
-		{
-			for (dx = -1; dx <= 1; dx++){
-			for (dy = -1; dy <= 1; dy++){
-				if ((c->x_pos+dx) >= 0 && (c->x_pos+dx) <= 15 && (c->y_pos+dy) >= 0 && (c->y_pos+dy) <= 15 )
-				{
-					if (dx != 0 || dy != 0)
-					{
-						cell *v = &g->cells[c->x_pos+dx][c->y_pos+dy];
-						return uncover(g,v)+1;
-						
-					}
-					
-				}
-		}	
-	}
-		}
-		
-		
-	}
-	
-	
-	return 0;
+    int dx, dy;
+    if (c->visible == 1 || c->marked == 1) {
+        return 0;
+    } else {
+        c->visible = 1;
+        draw_cell_actualise_window(c);
+
+        if (c->mine == 1 || c->mine_count > 0) {
+            return 1;
+
+        } else {
+            for (dx = -1; dx <= 1; dx++) {
+                for (dy = -1; dy <= 1; dy++) {
+                    if ((c->x_pos + dx) >= 0 && (c->x_pos + dx) <= g->x_size && (c->y_pos + dy) >= 0 &&
+                        (c->y_pos + dy) <= g->y_size) {
+                        if (dx != 0 || dy != 0) {
+                            cell *v = &g->cells[c->x_pos + dx][c->y_pos + dy];
+                            return uncover(g, v) + 1;
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    return 0;
 }
+

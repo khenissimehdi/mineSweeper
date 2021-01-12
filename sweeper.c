@@ -17,17 +17,17 @@
 */
 
 /* Beginner */
-/*#define GRID_WIDTH  9
+#define GRID_WIDTH  9
 #define GRID_HEIGHT 9
-#define NUMBER_OF_MINES 50
+#define NUMBER_OF_MINES 3
 #define LINE_COLOR MLV_COLOR_BLUE
-*/
-/* Intermediate */
 
+/* Intermediate */
+/*
 #define GRID_WIDTH  16
 #define GRID_HEIGHT 16
-#define NUMBER_OF_MINES 10
-
+#define NUMBER_OF_MINES 70
+*/
 
 /* Advanced */
 /*
@@ -41,7 +41,7 @@ int main() {
 	/* Create the internal representation of the game board */
 	grid *g = create_grid(GRID_WIDTH, GRID_HEIGHT);
 	add_mines(g, NUMBER_OF_MINES);
-	/*set_all_visible(g);*/
+	
 
 	
 	
@@ -50,6 +50,7 @@ int main() {
 	int width=GRID_WIDTH*GRID_SCALE;
 	int height=GRID_HEIGHT*GRID_SCALE;
 	MLV_create_window("Sweeper", "Sweeper", width, height);
+	
 
 	/* Draw the game board in the window */
 	draw_grid(g);
@@ -95,10 +96,12 @@ int main() {
 
 				/* The player has left clicked on an unmarked hidden cell */
 				int uncovered = uncover(g,c);
+			     
 				
-				printf("Uncovered %d cell(s)\n", uncovered);
+				
 				
 				remaining -= uncovered;
+				printf("Uncovered %d cell(s) remaining : %d\n", uncovered,remaining);
 				if (c->mine) {
 					/* The player has struck a mine */
 					printf("Game over! Press ESCAPE to quit.\n");
